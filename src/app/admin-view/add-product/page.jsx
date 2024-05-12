@@ -132,6 +132,7 @@ const AdminAddNewProduct = () => {
           {adminAddProductformControls?.map((controlItem) =>
             controlItem.componentType === "input" ? (
               <InputComponent
+                key={controlItem.id}
                 type={controlItem.type}
                 placeholder={controlItem.placeholder}
                 label={controlItem.label}
@@ -145,6 +146,7 @@ const AdminAddNewProduct = () => {
               />
             ) : controlItem.componentType === "select" ? (
               <SelectComponent
+                key={controlItem?.id}
                 label={controlItem.label}
                 options={controlItem.options}
                 value={formData[controlItem.id]}

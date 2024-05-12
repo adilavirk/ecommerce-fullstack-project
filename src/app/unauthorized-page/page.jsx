@@ -6,7 +6,7 @@ const page = () => {
           <div className="bg-white shadow">
             <div className="px-4 py-6 sm:px-8 sm:py-10 flex flex-col gap-5">
               <h1 className="font-bold text-lg">
-                You don't have access to view this page !
+                {`You don't have access to view this page !`}
               </h1>
             </div>
           </div>
