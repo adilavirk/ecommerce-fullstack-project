@@ -46,6 +46,7 @@ export async function POST(request) {
       );
     }
 
+    // jwt token JSON WEB TOKEN
     const token = jwt.sign(
       {
         id: checkUser._id,
