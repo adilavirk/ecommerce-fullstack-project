@@ -25,14 +25,14 @@ const AdminView = () => {
   const extractAllOrdersForAllUsers = async () => {
     setPageLevelLoader(true);
     const response = await getAllOrdersOfAllUsers();
-
-    console.log(response);
+    // console.log(response);
+    console.log(allOrdersOfAllUsers);
 
     if (response.success) {
       setPageLevelLoader(false);
       setAllOrdersOfAllUsers(
-        response?.data && response?.data.length
-          ? response.data.filter((item) => item.user._id !== user._id)
+        response?.data && response?.data?.length
+          ? response?.data?.filter((item) => item?.user?._id !== user._id)
           : []
       );
     } else {

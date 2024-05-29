@@ -24,13 +24,11 @@ export const addNewProduct = async (formData) => {
 export const getAllProducts = async () => {
   try {
     //here we will give absolute url.
-    const response = await fetch(
-      "http://localhost:3000/api/admin/all-products",
-      {
-        method: "GET",
-        cache: "no-store",
-      }
-    );
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const response = await fetch(`${baseUrl}/api/admin/all-products`, {
+      method: "GET",
+      cache: "no-store",
+    });
 
     const finalData = await response.json();
 
