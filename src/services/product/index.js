@@ -25,6 +25,7 @@ export const getAllProducts = async () => {
   try {
     //here we will give absolute url.
     const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
     const response = await fetch(`${baseUrl}/api/admin/all-products`, {
       method: "GET",
       cache: "no-store",
@@ -82,7 +83,7 @@ export const deleteAProduct = async (id) => {
 export const productsByCategory = async (id) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/client/filter-products-by-category?id=${id}`,
+      `/api/client/filter-products-by-category?id=${id}`,
       {
         method: "GET",
         cache: "no-store",
@@ -99,8 +100,9 @@ export const productsByCategory = async (id) => {
 
 export const ProductById = async (id) => {
   try {
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
     const response = await fetch(
-      `http://localhost:3000/api/client/product-by-id?id=${id}`,
+      `${baseUrl}/api/client/product-by-id?id=${id}`,
       {
         method: "GET",
         cache: "no-store",

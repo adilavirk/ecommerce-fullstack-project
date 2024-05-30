@@ -133,7 +133,7 @@ const Checkout = () => {
   const handleCheckOut = async () => {
     const stripe = await stripePromise;
 
-    const createLineItems = cartItems.map((item) => ({
+    const createLineItems = cartItems?.map((item) => ({
       price_data: {
         currency: "usd",
         product_data: {
@@ -245,6 +245,7 @@ const Checkout = () => {
                         height={300}
                         width={300}
                         className="w-[300px] md:w-[400px]"
+                        alt="empty cart"
                       />
                       <span className="text-xl font-bold">
                         Your cart is empty.
