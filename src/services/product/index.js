@@ -85,7 +85,7 @@ export const deleteAProduct = async (id) => {
 export const productsByCategory = async (id) => {
   try {
     const response = await fetch(
-      `/api/client/filter-products-by-category?id=${id}`,
+      `https://ecommerce-fullstack-project.vercel.app/api/client/filter-products-by-category?id=${id}`,
       {
         method: "GET",
         cache: "no-store",
