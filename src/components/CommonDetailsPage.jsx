@@ -3,18 +3,38 @@
 import Link from "next/link";
 import ComponentLevelLoader from "./ComponentLevelLoader";
 import { GlobalContext } from "../context";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ProductDetailsCrousel from "../components/ProductDetailsCrousel";
 import toast from "react-hot-toast";
 import { addToCart } from "../services/cart/index";
+import { PulseLoader } from "react-spinners";
 
-const CommonDetailsPage = ({ item }) => {
+const CommonDetailsPage = ({ id }) => {
   const {
     setComponentLevelLoader,
     componentLevelLoader,
     user,
     setShowCartModal,
+    pageLevelLoader,
+    setPageLevelLoader,
   } = useContext(GlobalContext);
+
+  const [item, setItem] = useState([]);
+
+  const fetchProductDetails = async () => {
+    try {
+      setPageLevelLoader(true);
+      const response = await fetch(`/api/client/product-by-id?id=${id}`, {
+        method: "GET",
+        cache: "no-store",
+      });
+      const finalData = await response.json();
+      setItem(finalData);
+      setPageLevelLoader(false);
+    } catch (error) {
+      throw new Error("Failed to fetch the product details. Please try again.");
+    }
+  };
 
   // handleAddToCart method
 
@@ -35,9 +55,26 @@ const CommonDetailsPage = ({ item }) => {
       setComponentLevelLoader({ loading: false, id: "" });
       setShowCartModal(true);
     }
-
-    console.log(response);
   }
+  useEffect(() => {
+    if (id) {
+      fetchProductDetails();
+    }
+  }, [id]);
+  // pulse page loader
+  if (pageLevelLoader) {
+    return (
+      <div className="w-full min-h-screen flex justify-center items-center">
+        <PulseLoader
+          color={"#000000"}
+          loading={pageLevelLoader}
+          size={30}
+          data-testid="loader"
+        />
+      </div>
+    );
+  }
+
   return (
     <section className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto px-4">
@@ -47,57 +84,35 @@ const CommonDetailsPage = ({ item }) => {
             <div className="lg:flex lg:items-start">
               <div className="lg:order-2 lg:ml-5">
                 <div className="max-w-xl overflow-hidden rounded-lg">
-                  <ProductDetailsCrousel data={item} />
+                  <ProductDetailsCrousel data={item?.data} />
                 </div>
               </div>
-              {/* <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
-                <div className="flex flex-row items-start lg:flex-col">
-                  <button
-                    type="button"
-                    className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-100 text-center"
-                  >
-                    <img
-                      src={item?.imageUrl}
-                      className="h-full w-full object-cover"
-                      alt="Product Details"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-100 text-center"
-                  >
-                    <img
-                      src={item?.imageUrl}
-                      className="h-full w-full object-cover"
-                      alt="Product Details"
-                    />
-                  </button>
-                </div>
-              </div> */}
             </div>
           </div>
           {/* right part */}
           <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
-            <h1 className="text-2xl font-bold text-gray-900">{item?.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              {item?.data?.name}
+            </h1>
             <div className="mt-10 flex flex-col items-center justify-between space-y-4 botder-t border-b py-4 sm:flex-row sm:space-y-0">
               <div className="flex items-end">
                 <h1
                   className={`text-3xl font-bold mr-2 ${
-                    item?.onSale === "yes" ? "line-through" : ""
+                    item?.data?.onSale === "yes" ? "line-through" : ""
                   }`}
                 >
-                  ${item?.price}
+                  ${item?.data?.price}
                 </h1>
-                {item?.onSale === "yes" ? (
+                {item?.data?.onSale === "yes" ? (
                   <h1 className="text-3xl font-bold text-red-700">{`$${(
-                    item.price -
-                    item.price * (item.priceDrop / 100)
+                    item?.data?.price -
+                    item?.data?.price * (item?.data?.priceDrop / 100)
                   ).toFixed(2)}`}</h1>
                 ) : null}
               </div>
               <button
                 type="button"
-                onClick={() => handleAddToCart(item)}
+                onClick={() => handleAddToCart(item.data)}
                 className="buttonsStyle"
               >
                 {componentLevelLoader && componentLevelLoader.loading ? (
@@ -115,7 +130,7 @@ const CommonDetailsPage = ({ item }) => {
             </div>
             <ul className="mt-8 space-y-2">
               <li className="flex items-center text-left text-sm font-medium text-gray-600">
-                {item && item.deliveryInfo}
+                {item && item?.data?.deliveryInfo}
               </li>
               <li className="flex items-center text-left text-sm font-medium text-gray-600">
                 {"Cancel anytime"}
@@ -132,7 +147,9 @@ const CommonDetailsPage = ({ item }) => {
                   </Link>
                 </nav>
               </div>
-              <div className="mt-8 flow-root sm:mt-12">{item?.description}</div>
+              <div className="mt-8 flow-root sm:mt-12">
+                {item?.data?.description}
+              </div>
             </div>
           </div>
         </div>

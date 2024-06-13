@@ -21,15 +21,12 @@ export const addToCart = async (formData) => {
 
 export const getAllCartItems = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/cart/all-cart-items?id=${id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token")}`,
-        },
-      }
-    );
+    const response = await fetch(`/api/cart/all-cart-items?id=${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${Cookies.get("token")}`,
+      },
+    });
 
     const data = await response.json();
 

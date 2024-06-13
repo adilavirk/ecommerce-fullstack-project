@@ -1,18 +1,17 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, Suspense } from "react";
 import { GlobalContext } from "../../context/index";
 import Image from "next/image";
 import { fetchAllAdresses } from "../../services/address";
 import { useRouter, useSearchParams } from "next/navigation";
-
 import { PulseLoader } from "react-spinners";
 import { loadStripe } from "@stripe/stripe-js";
 import { callStripeSession } from "../../services/stripe/index";
 import { createNewOrder } from "../../services/order/index";
 import toast from "react-hot-toast";
 
-const Checkout = () => {
+const CheckoutContent = () => {
   const {
     cartItems,
     user,
@@ -24,19 +23,14 @@ const Checkout = () => {
     setPageLevelLoader,
   } = useContext(GlobalContext);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  // state to check the order is processing or not so that we can show loader if state is currently in processing
   const [isOrderProcessing, setIsOrderProcessing] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const router = useRouter();
   const params = useSearchParams();
 
-  // stripe Publishable key
   const publishableKey =
     "pk_test_51PDIcyEGovJJ7bMzkyo6IrssG6VusbFUxlNUvqIztAnJb5GUWp7LtZItffKNnKHWN4lvgYTqgklVcETFQRAdJc2o00z68TPry3";
-  // stripe promise
   const stripePromise = loadStripe(publishableKey);
-
-  // method to fetch/get all addresses
 
   const getAllAddresses = async () => {
     setPageLevelLoader(true);
@@ -53,7 +47,6 @@ const Checkout = () => {
     }
   }, [user]);
 
-  // when order processing is completed
   useEffect(() => {
     async function createFinalOrder() {
       const isStripe = JSON.parse(localStorage.getItem("stripe"));
@@ -76,12 +69,11 @@ const Checkout = () => {
             quantity: 1,
             product: item.productID,
           })),
-
           paymentMethod: "Stripe",
           totalPrice: cartItems.reduce(
-            (total, item) => (item.productID.price + total, 0)
+            (total, item) => item.productID.price + total,
+            0
           ),
-
           isPaid: true,
           isProcessing: true,
           paidAt: new Date(),
@@ -89,7 +81,8 @@ const Checkout = () => {
         const response = await createNewOrder(createFinalCheckOutFormData);
 
         if (response.success) {
-          setIsOrderProcessing(false), setOrderSuccess(true);
+          setIsOrderProcessing(false);
+          setOrderSuccess(true);
           toast.success(response.message);
         } else {
           setIsOrderProcessing(false);
@@ -99,13 +92,9 @@ const Checkout = () => {
     }
 
     createFinalOrder();
-  }, [params.get("status"), cartItems]);
-
-  // function to handle the selected address
+  }, [params, cartItems]);
 
   const handleSelectedAddress = (item) => {
-    // if we double click or select two times the same address then we have to unselect that address
-
     if (item._id === selectedAddress) {
       setSelectedAddress(null);
       setCheckOutFormData({
@@ -128,8 +117,6 @@ const Checkout = () => {
     });
   };
 
-  // stripe handleCheckout method
-
   const handleCheckOut = async () => {
     const stripe = await stripePromise;
 
@@ -147,30 +134,24 @@ const Checkout = () => {
 
     const response = await callStripeSession(createLineItems);
 
-    console.log(response);
     setIsOrderProcessing(true);
 
     localStorage.setItem("stripe", true);
     localStorage.setItem("checkoutFormData", JSON.stringify(checkoutFormData));
 
-    // if there is any kind of error
     const { error } = await stripe.redirectToCheckout({
       sessionId: response.id,
     });
     console.log(error);
   };
 
-  // redirect to orders page after successfully placing the order
   useEffect(() => {
     if (orderSuccess) {
       setTimeout(() => {
-        // setOrderSuccess(false);
         router.push("/orders");
-      }, [2000]);
+      }, 2000);
     }
-  }, [orderSuccess]);
-
-  // if order is placed successfully
+  }, [orderSuccess, router]);
 
   if (orderSuccess) {
     return (
@@ -190,7 +171,7 @@ const Checkout = () => {
       </section>
     );
   }
-  // if order is in processing state
+
   if (isOrderProcessing) {
     return (
       <div className="w-full min-h-screen flex justify-center items-center">
@@ -216,7 +197,6 @@ const Checkout = () => {
                   className="flex flex-col rounded-lg bg-white sm:flex-row"
                   key={item._id}
                 >
-                  {/* product image */}
                   <Image
                     src={item?.productID?.imageUrl}
                     alt="Cart Item"
@@ -224,8 +204,6 @@ const Checkout = () => {
                     height={40}
                     className="m-2  rounded-md border object-cover object-center"
                   />
-
-                  {/* product name */}
                   <div className="flex w-full flex-col px-4 py-4">
                     <span className="font-bold">{item?.productID?.name}</span>
                     <span className="font-semibold">
@@ -236,35 +214,29 @@ const Checkout = () => {
               ))
             ) : (
               <>
-                {/* Empty cart Icon */}
                 {cartItems?.length < 1 && (
-                  <>
-                    <div className="flex-[2] flex flex-col items-center pb-[50px] md:-mt-2 ">
-                      <Image
-                        src="/assets/empty-cart.jpg"
-                        height={300}
-                        width={300}
-                        className="w-[300px] md:w-[400px]"
-                        alt="empty cart"
-                      />
-                      <span className="text-xl font-bold">
-                        Your cart is empty.
-                      </span>
-                    </div>
-                  </>
+                  <div className="flex-[2] flex flex-col items-center pb-[50px] md:-mt-2 ">
+                    <Image
+                      src="/assets/empty-cart.jpg"
+                      height={300}
+                      width={300}
+                      className="w-[300px] md:w-[400px]"
+                      alt="empty cart"
+                    />
+                    <span className="text-xl font-bold">
+                      Your cart is empty.
+                    </span>
+                  </div>
                 )}
               </>
             )}
           </div>
         </div>
-
-        {/* renser all the addresses here */}
         <div className="mt-10 bg-gray-50 px-4 pt-8 lg:mt-0">
           <p className="text-xl font-medium">Shipping address details</p>
           <p className="text-gray-400 font-bold">
             Complete your order by selecting address below
           </p>
-
           <div className="w-full mt-6 mb-0 mx-0 space-y-6 ">
             {addresses && addresses.length ? (
               addresses?.map((item) => (
@@ -299,7 +271,6 @@ const Checkout = () => {
           >
             Add New Address
           </button>
-          {/* Subtotal */}
           <div className="mt-6 border-t border-b py-2">
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-gray-900">Subtotal</p>
@@ -313,14 +284,10 @@ const Checkout = () => {
                   : "0"}
               </p>
             </div>
-
-            {/*  */}
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-gray-900">Shipping</p>
               <p className="text-lg  font-bold text-gray-900">Free</p>
             </div>
-            {/* total amount */}
-
             <div className="flex items-center justify-between">
               <p className="text-sm font-medium text-gray-900">Total</p>
               <p className="text-lg  font-bold text-gray-900">
@@ -333,9 +300,6 @@ const Checkout = () => {
                   : "0"}
               </p>
             </div>
-
-            {/* checkout button */}
-
             <div className="pb-10">
               <button
                 disabled={
@@ -354,5 +318,11 @@ const Checkout = () => {
     </div>
   );
 };
+
+const Checkout = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <CheckoutContent />
+  </Suspense>
+);
 
 export default Checkout;

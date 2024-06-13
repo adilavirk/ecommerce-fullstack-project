@@ -7,32 +7,35 @@ import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context";
 import { PulseLoader } from "react-spinners";
 
-const CommonProductsListing = () => {
+const CategoryWiseProductsListing = ({ category }) => {
   const [data, setData] = useState([]);
   const { pageLevelLoader, setPageLevelLoader } = useContext(GlobalContext);
-  const getAllProducts = async () => {
+  const fetchCategoryWiseProducts = async () => {
     try {
       setPageLevelLoader(true);
-      const response = await fetch("/api/admin/all-products", {
-        method: "GET",
-        cache: "no-store",
-      });
-
+      const response = await fetch(
+        `/api/client/filter-products-by-category?id=${category}`,
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
       const finalData = await response.json();
       setData(finalData.data);
       setPageLevelLoader(false);
     } catch (error) {
-      console.log("error occured while adding the product", error);
+      console.log(
+        `error occured while fetching the products of ${category} category`
+      );
     }
   };
-  // to get the updated data in the product card/to display updated product data on "all-products" page.
-
   const router = useRouter();
   useEffect(() => {
-    getAllProducts();
+    fetchCategoryWiseProducts();
     // refresh the page.
     router.refresh();
   }, []);
+
   // pulse page loader
   if (pageLevelLoader) {
     return (
@@ -46,6 +49,7 @@ const CommonProductsListing = () => {
       </div>
     );
   }
+
   return (
     <section className="bg-white py-12 sm:py-16">
       <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -57,10 +61,7 @@ const CommonProductsListing = () => {
                   key={item._id}
                 >
                   <ProductCard item={item} />
-                  <ProductButtons
-                    item={item}
-                    refreshProducts={getAllProducts}
-                  />
+                  <ProductButtons item={item} />
                 </article>
               ))
             : null}
@@ -70,4 +71,4 @@ const CommonProductsListing = () => {
   );
 };
 
-export default CommonProductsListing;
+export default CategoryWiseProductsListing;

@@ -2,10 +2,11 @@ import CommonDetailsPage from "../../../components/CommonDetailsPage";
 import { ProductById } from "../../../services/product";
 
 const ProductDetails = async ({ params }) => {
-  const productDetailsData = await ProductById(params.details);
+  // const productDetailsData = await ProductById(params.details);
 
   return (
-    <CommonDetailsPage item={productDetailsData && productDetailsData.data} />
+    // <CommonDetailsPage item={productDetailsData && productDetailsData.data} />
+    <CommonDetailsPage id={params.details} />
   );
 };
 

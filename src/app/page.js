@@ -7,20 +7,34 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const router = useRouter();
+  // const [data, setData] = useState([]);
   const { isAuthUser } = useContext(GlobalContext);
   const [products, setProducts] = useState([]);
 
   const getListOfProducts = async () => {
-    const response = await getAllProducts();
-    if (response.success) {
-      setProducts(response.data);
+    // const response = await getAllProducts();
+    // if (response.success) {
+    //   setProducts(response.data);
+    // }
+
+    try {
+      const response = await fetch("/api/admin/all-products", {
+        method: "GET",
+        cache: "no-store",
+      });
+
+      const finalData = await response.json();
+
+      setProducts(finalData.data);
+    } catch (error) {
+      console.log("error occured while adding the product", error);
     }
   };
 
   useEffect(() => {
     getListOfProducts();
   }, []);
-  console.log(products);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <section>

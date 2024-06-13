@@ -2,13 +2,9 @@ import { getAllProducts } from "../../../../services/product/index";
 import CommonProductsListing from "../../../../components/CommonProductsListing";
 
 const AllProducts = async () => {
-  const getAllClientProducts = await getAllProducts();
+  // const getAllClientProducts = await getAllProducts();
 
-  return (
-    <CommonProductsListing
-      data={getAllClientProducts && getAllClientProducts.data}
-    />
-  );
+  return <CommonProductsListing />;
 };
 
 export default AllProducts;

@@ -26,6 +26,8 @@ export const GlobalState = ({ children }) => {
   });
   const [isAuthUser, setIsAuthUser] = useState(null);
   const [user, setUser] = useState(null);
+  // state to fetch all the products/store all the products
+  const [data, setData] = useState([]);
   // state to update the product
   const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
   // state for cart modal
@@ -123,6 +125,8 @@ export const GlobalState = ({ children }) => {
         setOrderDetails,
         allOrdersOfAllUsers,
         setAllOrdersOfAllUsers,
+        data,
+        setData,
       }}
     >
       {children}

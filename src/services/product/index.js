@@ -100,14 +100,11 @@ export const productsByCategory = async (id) => {
 
 export const ProductById = async (id) => {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const response = await fetch(
-      `${baseUrl}/api/client/product-by-id?id=${id}`,
-      {
-        method: "GET",
-        cache: "no-store",
-      }
-    );
+    // const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+    const response = await fetch(`/api/client/product-by-id?id=${id}`, {
+      method: "GET",
+      cache: "no-store",
+    });
     const finalData = await response.json();
     return finalData;
   } catch (error) {
