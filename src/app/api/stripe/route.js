@@ -24,8 +24,10 @@ export const POST = async (request) => {
       payment_method_types: ["card"],
       line_items: response, // Make sure response is correctly formatted for Stripe
       mode: "payment",
-      success_url: "http://localhost:3000/checkout?status=success",
-      cancel_url: "http://localhost:3000/checkout?status=cancel",
+      success_url:
+        "https://ecommerce-fullstack-project.vercel.app/checkout?status=success",
+      cancel_url:
+        "https://ecommerce-fullstack-project.vercel.app/checkout?status=cancel",
     });
 
     return NextResponse.json({
