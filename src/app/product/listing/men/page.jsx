@@ -1,16 +1,13 @@
-// import { productsByCategory } from "../../../../services/product/index";
-import CategoryWiseProductsListing from "../../../../components/CategoryWiseProductsListing";
+import { productsByCategory } from "../../../../services/product/index";
+import CommonProductsListing from "../../../../components/CommonProductsListing";
 
 const MenCategory = async () => {
-  // const getAllCategoryProducts = await productsByCategory("men");
-  // console.log(getAllCategoryProducts.data);
+  const getAllCategoryProducts = await productsByCategory("men");
 
   return (
-    // <CategoryWiseProductsListing
-    //   data={getAllCategoryProducts && getAllCategoryProducts.data}
-    // />
-
-    <CategoryWiseProductsListing category="men" />
+    <CommonProductsListing
+      data={getAllCategoryProducts && getAllCategoryProducts.data}
+    />
   );
 };
 

@@ -24,12 +24,14 @@ export const addNewProduct = async (formData) => {
 export const getAllProducts = async () => {
   try {
     //here we will give absolute url.
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-    const response = await fetch(`${baseUrl}/api/admin/all-products`, {
-      method: "GET",
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `https://ecommerce-fullstack-project.vercel.app/api/admin/all-products`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
 
     const finalData = await response.json();
 
@@ -100,11 +102,13 @@ export const productsByCategory = async (id) => {
 
 export const ProductById = async (id) => {
   try {
-    // const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
-    const response = await fetch(`/api/client/product-by-id?id=${id}`, {
-      method: "GET",
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `https://ecommerce-fullstack-project.vercel.app/api/client/product-by-id?id=${id}`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    );
     const finalData = await response.json();
     return finalData;
   } catch (error) {

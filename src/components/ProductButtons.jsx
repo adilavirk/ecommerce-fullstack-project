@@ -1,5 +1,3 @@
-"use client";
-
 import { usePathname } from "next/navigation";
 import React, { useContext } from "react";
 import { GlobalContext } from "../context";
@@ -9,7 +7,7 @@ import { deleteAProduct } from "../services/product";
 import { addToCart } from "../services/cart/index";
 import ComponentLevelLoader from "./ComponentLevelLoader";
 
-const ProductButtons = ({ item, refreshProducts }) => {
+const ProductButtons = ({ item }) => {
   // to check wether it is admin view or not.
   const pathname = usePathname();
   const isAdminView = pathname.includes("admin-view"); //returns true or false.
@@ -32,16 +30,12 @@ const ProductButtons = ({ item, refreshProducts }) => {
       if (response.success) {
         setComponentLevelLoader({ loading: false, id: "" });
         toast.success(response.message);
-        // router.refresh();
-        refreshProducts();
+        router.refresh();
       } else {
         setComponentLevelLoader({ loading: false, id: "" });
-        toast.error("Failed to delete the product.");
       }
     } catch (error) {
-      console.error("Error deleting product:", error);
       toast.error(error.message);
-      setComponentLevelLoader({ loading: false, id: "" });
     }
   };
 
