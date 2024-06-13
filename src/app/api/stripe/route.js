@@ -19,6 +19,7 @@ export const POST = async (request) => {
 
     const response = await request.json();
     console.log(response);
+    // fixed success url issue
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
