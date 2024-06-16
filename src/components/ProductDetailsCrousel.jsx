@@ -35,6 +35,16 @@ const ProductDetailsCrousel = ({ data }) => {
           src={data?.imageUrl}
           alt="product details"
         />
+        <img
+          className="h-full w-full max-w-full object-cover"
+          src={data?.imageUrl}
+          alt="product details"
+        />
+        <img
+          className="h-full w-full max-w-full object-cover"
+          src={data?.imageUrl}
+          alt="product details"
+        />
       </Carousel>
     </div>
   );

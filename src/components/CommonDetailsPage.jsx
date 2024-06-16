@@ -110,6 +110,12 @@ const CommonDetailsPage = ({ item }) => {
               </div>
               <div className="mt-8 flow-root sm:mt-12">{item?.description}</div>
             </div>
+
+            {/* display sizes */}
+
+            <div>
+              <div>{item?.size}</div>
+            </div>
           </div>
         </div>
       </div>
