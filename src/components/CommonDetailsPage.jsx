@@ -97,7 +97,7 @@ const CommonDetailsPage = ({ item }) => {
                 {"Cancel anytime"}
               </li>
             </ul>
-            {/* added this now */}
+
             {/* display sizes */}
             <div className="mt-8">
               <h2 className="text-xl font-semibold">Available Sizes:</h2>
@@ -124,28 +124,7 @@ const CommonDetailsPage = ({ item }) => {
                   </Link>
                 </nav>
               </div>
-              <div className="mt-8 flow-root sm:mt-12">
-                {item?.description || (
-                  <p>
-                    Introducing our versatile and high-quality product, designed
-                    to meet your needs with a perfect blend of style,
-                    functionality, and durability. Crafted with meticulous
-                    attention to detail, our product ensures exceptional
-                    performance and satisfaction, whether you're at home, at
-                    work, or on the go. The premium materials used in its
-                    construction guarantee longevity and reliability, providing
-                    you with a product that stands the test of time. With a
-                    user-friendly design and intuitive features, it is easy to
-                    use and enhances your everyday experiences. Available in
-                    various sizes, colors, and styles, it caters to diverse
-                    preferences and needs. Our commitment to sustainability and
-                    ethical manufacturing practices ensures that you are making
-                    an eco-friendly choice. Experience the perfect combination
-                    of quality, innovation, and value with our product, and
-                    elevate your lifestyle to the next level.
-                  </p>
-                )}
-              </div>
+              <div className="mt-8 flow-root sm:mt-12">{item?.description}</div>
             </div>
           </div>
         </div>
