@@ -55,7 +55,7 @@ const CommonDetailsPage = ({ item }) => {
           {/* right part */}
           <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
             <h1 className="text-2xl font-bold text-gray-900">{item?.name}</h1>
-            <div className="mt-10 flex flex-col items-center justify-between space-y-4 botder-t border-b py-4 sm:flex-row sm:space-y-0">
+            <div className="mt-10 flex flex-col items-center justify-between space-y-4 border-t border-b py-4 sm:flex-row sm:space-y-0">
               <div className="flex items-end">
                 <h1
                   className={`text-3xl font-bold mr-2 ${
@@ -97,7 +97,23 @@ const CommonDetailsPage = ({ item }) => {
                 {"Cancel anytime"}
               </li>
             </ul>
-            <div className="lg:col-span-3">
+
+            {/* display sizes */}
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold">Available Sizes:</h2>
+              <div className="flex space-x-2 mt-2">
+                {item?.sizes?.map((size) => (
+                  <span
+                    key={size.id}
+                    className="px-4 py-2 border rounded-lg text-center"
+                  >
+                    {size.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-3 mt-8">
               <div className="border-b border-gray-400">
                 <nav className="flex gap-4">
                   <Link
@@ -108,13 +124,28 @@ const CommonDetailsPage = ({ item }) => {
                   </Link>
                 </nav>
               </div>
-              <div className="mt-8 flow-root sm:mt-12">{item?.description}</div>
-            </div>
-
-            {/* display sizes */}
-
-            <div>
-              <div>{item?.size}</div>
+              <div className="mt-8 flow-root sm:mt-12">
+                {item?.description || (
+                  <p>
+                    Introducing our versatile and high-quality product, designed
+                    to meet your needs with a perfect blend of style,
+                    functionality, and durability. Crafted with meticulous
+                    attention to detail, our product ensures exceptional
+                    performance and satisfaction, whether you're at home, at
+                    work, or on the go. The premium materials used in its
+                    construction guarantee longevity and reliability, providing
+                    you with a product that stands the test of time. With a
+                    user-friendly design and intuitive features, it is easy to
+                    use and enhances your everyday experiences. Available in
+                    various sizes, colors, and styles, it caters to diverse
+                    preferences and needs. Our commitment to sustainability and
+                    ethical manufacturing practices ensures that you are making
+                    an eco-friendly choice. Experience the perfect combination
+                    of quality, innovation, and value with our product, and
+                    elevate your lifestyle to the next level.
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
