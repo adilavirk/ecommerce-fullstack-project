@@ -90,14 +90,13 @@ const CommonDetailsPage = ({ item }) => {
               </button>
             </div>
             <ul className="mt-8 space-y-2">
-              <li className="flex items-center text-left text-sm font-medium text-gray-600">
-                {item && item.deliveryInfo}
-              </li>
-              <li className="flex items-center text-left text-sm font-medium text-gray-600">
-                {"Cancel anytime"}
-              </li>
+              <h2 className="text-xl font-semibold">Delivery Information:</h2>
+              <div className=" flex items-center justify-between text-left text-sm font-medium text-gray-600">
+                <p className="">{item && item.deliveryInfo}</p>
+                <p className="">{"Cancel anytime"}</p>
+              </div>
             </ul>
-
+            {/* added this now */}
             {/* display sizes */}
             <div className="mt-8">
               <h2 className="text-xl font-semibold">Available Sizes:</h2>
