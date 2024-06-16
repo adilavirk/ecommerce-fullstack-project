@@ -97,7 +97,7 @@ const CommonDetailsPage = ({ item }) => {
                 {"Cancel anytime"}
               </li>
             </ul>
-
+            {/* added this now */}
             {/* display sizes */}
             <div className="mt-8">
               <h2 className="text-xl font-semibold">Available Sizes:</h2>
